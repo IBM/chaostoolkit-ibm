@@ -1,10 +1,3 @@
-```
-  /\_/\  
- ( @.@ ) 
- =\ x /= (
- ( | | )  )
-(__m m__)/
-```    
 # This project is a collection of actions and probes, gathered as an extension to the Chaos Toolkit. It targets the IBM Cloud platform.
 
 [![Build Status](https://travis.ibm.com/Ahmed-Sayed-Hassan/chaostoolkit-ibmcloud.svg?token=Gz9qQvEsAkRRVj6sGwRD&branch=master)](https://travis.ibm.com/Ahmed-Sayed-Hassan/chaostoolkit-ibmcloud)
