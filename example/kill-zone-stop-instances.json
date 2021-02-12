@@ -1,0 +1,38 @@
+{
+    "version": "1.0.0",
+    "title": "What is the impact of Kill a Zone?",
+    "description": "In this exp I will the drop the zone by kill instances .",
+    "tags": [
+        "tls"
+    ],
+    "configuration": {
+        "api_key":{
+            "type": "env",
+            "key": "API_KEY"
+        },
+        "generation": "2",
+        "service_url": "https://jp-tok.iaas.cloud.ibm.com/v1"
+    },    
+    "method": [
+        {
+            "type": "action",
+            "name": "Stop instances at zone jp-tok-3",
+            "provider": {
+                "type": "python",
+                "module": "ibmcloud.vpc.actions",
+                "func": "stop_multiple_instances",
+                "arguments": {
+                    "vpc_id": "r022-4817a45d-bbfb-4adc-8584-f52b6ea42039",
+                    "zone": "jp-tok-3",
+                    "tag": true
+                }
+            },
+            "pauses": {
+                "after": 30
+            }
+        }
+    ],
+    "rollbacks": [
+       
+    ]
+}

@@ -1,0 +1,44 @@
+{
+    "version": "1.0.0",
+    "title": "What is the impact of Adding network Delay for 20 Seconds",
+    "description": "This a dummy experiment.",
+    "tags": [
+        "tls"
+    ],
+    "configuration": {
+        "api_key": {
+            "type": "env",
+            "key": "API_KEY"
+        },
+        "generation": "2",
+        "service_url": "https://jp-tok.iaas.cloud.ibm.com/v1"
+    },
+    "steady-state-hypothesis": {
+        "title": "Application response",
+        "probes": [
+        ]
+    },
+    "method": [
+        {
+            "type": "action",
+            "name": "Add Network Latency",
+            "provider": {
+                "type": "python",
+                "module": "ibmcloud.vpc.actions",
+                "func": "add_network_latency",
+                "arguments": {
+                    "instance_id": "02e7_2903eefd-d850-4758-9f19-f87a34e6546b",
+                    "username":"admin",
+                    "password":"test",
+                    "duration": 20,
+                    "tag": true
+                }
+            },
+            "pause": {
+                "after": 30
+            }
+        }
+    ],
+    "rollbacks": [
+    ]
+}

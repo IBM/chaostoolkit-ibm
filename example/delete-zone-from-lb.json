@@ -1,0 +1,41 @@
+{
+    "version": "1.0.0",
+    "title": "What is the impact of stopping Server?",
+    "description": "This a dummy experiment.",
+    "tags": [
+        "tls"
+    ],
+    "configuration": {
+        "api_key": {
+            "type": "env",
+            "key": "API_KEY"
+        },
+        "generation": "2",
+        "service_url": "https://jp-tok.iaas.cloud.ibm.com/v1"
+    },
+    "steady-state-hypothesis": {
+        "title": "Application responds",
+        "probes": [
+        ]
+    },
+    "method": [
+        {
+            "type": "action",
+            "name": "Delete Instances from LB pool",
+            "provider": {
+                "type": "python",
+                "module": "ibmcloud.vpc.actions",
+                "func": "delete_load_balancer_members",
+                "arguments": {
+                    "id": "r022-dddd9ffd-56d3-4491-af37-9707fc505706",
+                    "vpc_id" : "r022-ded18089-62b7-4020-9ffd-c014ecda2a39"
+                }
+            },
+            "pause": {
+                "after": 30
+            }
+        }
+    ],
+    "rollbacks": [
+    ]
+}

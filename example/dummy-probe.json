@@ -1,0 +1,80 @@
+{
+    "version": "1.0.0",
+    "title": "What is the impact of stopping Server?",
+    "description": "This a dummy experiment.",
+    "tags": [
+        "tls"
+    ],
+    "configuration": {
+        "api_key": {
+            "type": "env",
+            "key": "API_KEY"
+        },
+        "generation": "2",
+        "service_url": "https://jp-tok.iaas.cloud.ibm.com/v1"
+    },
+    "steady-state-hypothesis": {
+        "title": "Application responds",
+        "probes": [
+            {
+                "type": "probe",
+                "name": "Check the a machine is running",
+                "tolerance": {
+                    "type": "jsonpath",
+                    "path": "$[0].status",
+                    "expect": "running"
+                },
+                "provider": {
+                    "type": "python",
+                    "module": "ibmcloud.vpc.probes",
+                    "func": "get_virtual_servers",
+                    "arguments": {
+                        "name": "windows-jump"
+                    }
+                }
+            }
+        ]
+    },
+    "method": [
+        {
+            "type": "action",
+            "name": "Stop Windows Jump Server",
+            "provider": {
+                "type": "python",
+                "module": "ibmcloud.vpc.actions",
+                "func": "create_instance_action",
+                "arguments": {
+                    "instance_id": "02e7_2903eefd-d850-4758-9f19-f87a34e6546b",
+                    "type": "stop",
+                    "force": false
+                }
+            },
+            "pauses": {
+                "after": 30
+            }
+        },
+        {
+            "ref": "Check the a machine is running"
+        }
+
+    ],
+    "rollbacks": [
+        {
+            "type": "action",
+            "name": "Re-start Windows Jump Server",
+            "provider": {
+                "type": "python",
+                "module": "ibmcloud.vpc.actions",
+                "func": "create_instance_action",
+                "arguments": {
+                    "instance_id": "02g7_af1ee383-a6eb-4ed5-b9b7-fdbce23a25c2",
+                    "type": "start",
+                    "force": true
+                }
+            },
+            "pauses": {
+                "after": 60
+            }
+        }
+    ]
+}
