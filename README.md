@@ -12,11 +12,10 @@ extension to the [Chaos Toolkit][chaostoolkit].
 
 ### Desgin Principle and Contribution Guide.
 
-Chaostoolkit can ba considered a [Low Code Development Platform](https://en.wikipedia.org/wiki/Low-code_development_platform#:~:text=A%20low%2Dcode%20development%20platform,traditional%20hand%2Dcoded%20computer%20programming.)  The core principle of developing low code API, is formulated by [IBMer Nick O'Leary](https://twitter.com/knolleary/status/1275740133975785472)  the Node-Red creator as follow 
+Chaostoolkit can ba considered a [Low Code Development Platform](https://en.wikipedia.org/wiki/Low-code_development_platform#:~:text=A%20low%2Dcode%20development%20platform,traditional%20hand%2Dcoded%20computer%20programming.)  
 
-![Nick Lowcode Principles](https://raw.githubusercontent.com/ahmadsayed/node-red-contrib-web-babylonjs/master/snapshots/principles.png)
-
-Inspired by those principles, suggesting the following guidelines  for chaostoolkit-ibmcloud
+The following guidelines  for chaostoolkit-ibmcloud
+-----------------------------------------------------
 
 * All resources can be located with information available directly on the IBM cloud portal, such as Instance ID, Volume ID, try to avoid ID that is hard to locate such as (Volume attachment ID)
 * Instance ID is unique and available directly on IBM Cloud; try to use it to located other resources; for example, if you need an IP address, try to extract it from IP or floating IP.
