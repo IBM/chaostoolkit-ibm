@@ -41,7 +41,7 @@ def add_network_latency(configuration: Configuration,
                         username: str,
                         password: str,
                         duration: int = 30,
-                        delay: int = 30,
+                        delay: int = 300,
                         jitter: int = 50,
                         interface: str = None,
                         hostname: str = None,
@@ -59,9 +59,9 @@ def add_network_latency(configuration: Configuration,
         #client.exec_command('ls')
         #If interface not provided pick up the first none local interface
         if interface == None:
-            stdin, stdout, stderr = client.exec_command("ip addr | grep UP | grep -v LOOPBACK | awk -F':' '{print $2}' | sed -e 's/^[[:space:]]*//'")
+            _, stdout, _ = client.exec_command("ip addr | grep UP | grep -v LOOPBACK | awk -F':' '{print $2}' | sed -e 's/^[[:space:]]*//'")
             interface = next(stdout).strip()
-        stdin, stdout, stderr = client.exec_command(f'sudo tc qdisc add dev {interface} root netem delay {delay}ms {jitter}ms;sleep {duration};sudo tc qdisc del dev {interface} root')
+        _, stdout, _ = client.exec_command(f'sudo tc qdisc add dev {interface} root netem delay {delay}ms {jitter}ms;sleep {duration};sudo tc qdisc del dev {interface} root')
 
 
 def remove_volume_from_instance(configuration: Configuration,

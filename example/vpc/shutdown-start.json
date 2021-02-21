@@ -1,0 +1,57 @@
+{
+    "version": "1.0.0",
+    "title": "What is the impact of stopping Server?",
+    "description": "This a dummy experiment.",
+    "tags": [
+        "tls"
+    ],
+    "configuration": {
+        "api_key": {
+            "type": "env",
+            "key": "API_KEY"
+        },
+        "generation": "2",
+        "service_url": "https://au-syd.iaas.cloud.ibm.com/v1"
+    },
+    "method": [
+        {
+            "type": "action",
+            "name": "Stop chaos test server",
+            "provider": {
+                "type": "python",
+                "module": "ibmcloud.vpc.actions",
+                "func": "create_instance_action",
+                "arguments": {
+                    "instance_id": "02i7_695da850-3479-4d1f-80dc-87ae9f5976a7",
+                    "type": "stop",
+                    "force": false,
+                    "tag": true
+                }
+            },
+            "pauses": {
+                "after": 30
+            }
+        }
+
+    ],
+    "rollbacks": [
+        {
+            "type": "action",
+            "name": "Re-start chaos test Server",
+            "provider": {
+                "type": "python",
+                "module": "ibmcloud.vpc.actions",
+                "func": "create_instance_action",
+                "arguments": {
+                    "instance_id": "02i7_695da850-3479-4d1f-80dc-87ae9f5976a7",
+                    "type": "start",
+                    "force": true,
+                    "tag": true
+                }
+            },
+            "pauses": {
+                "after": 60
+            }
+        }
+    ]
+}

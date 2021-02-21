@@ -11,7 +11,7 @@
             "key": "API_KEY"
         },
         "generation": "2",
-        "service_url": "https://jp-tok.iaas.cloud.ibm.com/v1"
+        "service_url": "https://au-syd.iaas.cloud.ibm.com/v1"
     },
     "steady-state-hypothesis": {
         "title": "Application response",
@@ -27,8 +27,8 @@
                 "module": "ibmcloud.vpc.actions",
                 "func": "add_network_latency",
                 "arguments": {
-                    "instance_id": "02e7_2903eefd-d850-4758-9f19-f87a34e6546b",
-                    "username":"admin",
+                    "instance_id": "02i7_695da850-3479-4d1f-80dc-87ae9f5976a7",
+                    "username":"root",
                     "password":"test",
                     "duration": 20,
                     "tag": true

@@ -23,7 +23,6 @@ def create_ibmcloud_api_client(configuration : Configuration) -> VpcV1:
     api_key = configuration.get("api_key")
     gen = configuration.get("generation", 2)
     url = configuration.get("service_url", 'https://dallas.iaas.cloud.ibm.com/v1')
-    api_key = configuration.get("api_key")
     authenticator = IAMAuthenticator(api_key)
     service = VpcV1('2020-06-02', authenticator=authenticator,generation=int(gen))
     service.service_url=url
@@ -74,7 +73,9 @@ def load_exported_activities() -> List[DiscoveredActivities]:
     activities = []
     #activities.extend(discover_actions("ibmcloud.vpc.actions"))
     print(importlib.import_module("ibmcloud.vpc.probes"))
+    print(importlib.import_module("ibmcloud.container.actions"))
     activities.extend(discover_probes("ibmcloud.vpc.probes"))
     activities.extend(discover_actions("ibmcloud.vpc.actions"))
+    activities.extend(discover_actions("ibmcloud.container.actions"))
     return activities
 

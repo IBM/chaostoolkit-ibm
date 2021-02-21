@@ -11,7 +11,7 @@
             "key": "API_KEY"
         },
         "generation": "2",
-        "service_url": "https://jp-tok.iaas.cloud.ibm.com/v1"
+        "service_url": "https://au-syd.iaas.cloud.ibm.com/v1"
     },
     "steady-state-hypothesis": {
         "title": "Application responds",
@@ -25,11 +25,11 @@
                     "expect": "running"
                 },
                 "provider": {
-                    "type": "python",
+                    "type": "HTTP",
                     "module": "ibmcloud.vpc.probes",
                     "func": "get_virtual_servers",
                     "arguments": {
-                        "name": "windows-jump"
+                        "name": "chaos-test"
                     }
                 }
             }
@@ -38,15 +38,16 @@
     "method": [
         {
             "type": "action",
-            "name": "Stop Windows Jump Server",
+            "name": "Stop chaos test server",
             "provider": {
                 "type": "python",
                 "module": "ibmcloud.vpc.actions",
                 "func": "create_instance_action",
                 "arguments": {
-                    "instance_id": "02e7_2903eefd-d850-4758-9f19-f87a34e6546b",
+                    "instance_id": "02i7_695da850-3479-4d1f-80dc-87ae9f5976a7",
                     "type": "stop",
-                    "force": false
+                    "force": false,
+                    "tag": true
                 }
             },
             "pauses": {
@@ -61,15 +62,16 @@
     "rollbacks": [
         {
             "type": "action",
-            "name": "Re-start Windows Jump Server",
+            "name": "Re-start chaos test Server",
             "provider": {
                 "type": "python",
                 "module": "ibmcloud.vpc.actions",
                 "func": "create_instance_action",
                 "arguments": {
-                    "instance_id": "02g7_af1ee383-a6eb-4ed5-b9b7-fdbce23a25c2",
+                    "instance_id": "02i7_695da850-3479-4d1f-80dc-87ae9f5976a7",
                     "type": "start",
-                    "force": true
+                    "force": true,
+                    "tag": true
                 }
             },
             "pauses": {
