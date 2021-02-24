@@ -161,13 +161,6 @@ review.
 
 [pep8]: https://pycodestyle.readthedocs.io/en/latest/
 
-The Chaos Toolkit projects require all contributors must sign a
-[Developer Certificate of Origin][dco] on each commit they would like to merge
-into the master branch of the repository. Please, make sure you can abide by
-the rules of the DCO before submitting a PR.
-
-[dco]: https://github.com/probot/dco#how-it-works
-
 ### Develop
 
 If you wish to develop on this project, make sure to install the development
