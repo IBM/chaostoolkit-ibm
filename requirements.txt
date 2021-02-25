@@ -5,3 +5,4 @@ logzero==1.5.0
 paramiko==2.7.2
 ibm_platform_services
 ibm-cloud-sdk-core
+mysql-connector-python

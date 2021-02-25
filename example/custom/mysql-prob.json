@@ -1,0 +1,28 @@
+{
+    "version": "1.0.0",
+    "title": "What is the impact of stopping Server?",
+    "description": "This a dummy experiment.",
+    "steady-state-hypothesis": {
+        "title": "Application responds",
+        "probes": [
+            {
+                "type": "probe",
+                "name": "Check the a mysql is running",
+                "tolerance": 0,
+                "provider": {
+                    "type": "python",
+                    "module": "ibmcloud.custom.probes",
+                    "func": "probe_mysql",
+                    "arguments": {
+                        "host": "acceef95-au-syd.lb.appdomain.cloud",
+                        "user": "root",
+                        "password": "root_password",
+                        "iteration": 150
+                    }
+                }
+            }
+        ]
+    },
+    "method": [
+    ]
+}

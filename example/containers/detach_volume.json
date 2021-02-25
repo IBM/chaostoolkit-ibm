@@ -13,6 +13,27 @@
         "generation": "2",
         "service_url": "https://au-syd.iaas.cloud.ibm.com/v1"
     },
+    "steady-state-hypothesis": {
+        "title": "Application responds",
+        "probes": [
+            {
+                "type": "probe",
+                "name": "Check the a machine is running",
+                "tolerance": 0,
+                "provider": {
+                    "type": "python",
+                    "module": "ibmcloud.custom.probes",
+                    "func": "probe_mysql",
+                    "arguments": {
+                        "host": "acceef95-au-syd.lb.appdomain.cloud",
+                        "user": "root",
+                        "password": "root_password",
+                        "iteration": 50
+                    }
+                }
+            }
+        ]
+    },
     "method": [
         {
             "type": "action",
@@ -26,6 +47,9 @@
                     "volume_id": "r026-8fd2bf71-bb7d-4a66-bbdf-0c694b260175",
                     "worker_id":"kube-c0p0s2ss08odo1k9o7qg-kubechaoste-default-000001ee"
                 }
+            },
+            "pause": {
+                "after": 30
             }
         }
 

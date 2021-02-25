@@ -70,12 +70,9 @@ def load_exported_activities() -> List[DiscoveredActivities]:
     """
     Extract metadata from actions and probes exposed by this extension.
     """
-    activities = []
-    #activities.extend(discover_actions("ibmcloud.vpc.actions"))
-    print(importlib.import_module("ibmcloud.vpc.probes"))
-    print(importlib.import_module("ibmcloud.container.actions"))
+    activities = []    
     activities.extend(discover_probes("ibmcloud.vpc.probes"))
     activities.extend(discover_actions("ibmcloud.vpc.actions"))
     activities.extend(discover_actions("ibmcloud.container.actions"))
+    activities.extend(discover_actions("ibmcloud.custom.probes"))
     return activities
-
