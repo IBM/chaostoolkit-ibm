@@ -14,9 +14,9 @@
                     "module": "ibmcloud.custom.probes",
                     "func": "probe_mysql",
                     "arguments": {
-                        "host": "6b30f5b7-au-syd.lb.appdomain.cloud",
+                        "host": "hostorip",
                         "user": "root",
-                        "password": "password",
+                        "password": "<password>",
                         "iteration": 20
                     }
                 }
