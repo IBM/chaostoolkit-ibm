@@ -19,7 +19,7 @@ def probe_mysql ( host: str,
     errors = 0
     while errors < 5:
         try:
-            mydb = connector.connect(host = "host", user = user, password = password)
+            mydb = connector.connect(host = host, user = user, password = password)
             break
         except:
             logger.warn(f"Failed to connect to DB  after %s tries", errors)
@@ -34,15 +34,31 @@ def probe_mysql ( host: str,
     mycursor.execute("DROP table IF EXISTS test")
     mycursor.execute("CREATE TABLE IF NOT EXISTS test(ID int NOT NULL, name VARCHAR(255), address VARCHAR(255), PRIMARY KEY(ID))")
 
-    sql = "INSERT INTO test (ID ,name, address) VALUES (%s ,%s, %s)"
+    insert_sql = "INSERT INTO test (ID ,name, address) VALUES (%s ,%s, %s)"
+    select_sql = "SELECT * FROM test where ID = %s"
+    delete_sql = "Delete from table wher ID = %s"
 
     for i in range(iteration):
-        val = (i,"name"+str(i), "address"+str(i))
         try:
-            mycursor.execute(sql, val)
+            mycursor.execute(insert_sql, (i,"name"+str(i), "address"+str(i)))
             mydb.commit()
-        except:
+        except Exception as e:
+            logger.error("Error with Insertion : %s", e)
             errors = errors + 1
 
+        time.sleep(1)        
+        try:
+            mycursor.execute(select_sql, (i, ))
+            mycursor.fetchall()
+        except Exception as e:
+            logger.error("Error with select : %s", e)
+            errors = errors + 1   
+
+        try:
+            mycursor.executee(delete_sql, (i, ))
+            mycursor.execute()
+        except Exception as e:
+            logger.error("Error with Deletetion: %s", e)
+            errors = errors +  1
 
     return errors

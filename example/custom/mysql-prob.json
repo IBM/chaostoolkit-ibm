@@ -17,7 +17,7 @@
                         "host": "acceef95-au-syd.lb.appdomain.cloud",
                         "user": "root",
                         "password": "root_password",
-                        "iteration": 150
+                        "iteration": 5
                     }
                 }
             }

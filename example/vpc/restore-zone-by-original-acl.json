@@ -1,0 +1,39 @@
+{
+    "version": "1.0.0",
+    "title": "Restoring the original ACL for a zone dropped by Chaostoolkit?",
+    "description": "Bring the original  acl and replace and delete the acl created by the tool called choas",
+    "tags": [
+        "tls"
+    ],
+    "configuration": {
+        "api_key":{
+            "type": "env",
+            "key": "API_KEY"
+        },
+        "generation": "2",
+        "service_url": "https://au-syd.iaas.cloud.ibm.com/v1"
+    },    
+    "method": [
+        {
+            "type": "action",
+            "name": "ACL cordon instances at zone au-syd-1",
+            "provider": {
+                "type": "python",
+                "module": "ibmcloud.vpc.actions",
+                "func": "uncordon_subnet",
+                "arguments": {
+                    "vpc_id": "r026-fcfd2d0e-c752-4b88-8282-0f714a812c19",
+                    "subnet_id": "02i7-c7d8183d-85da-4b0f-9fde-a1c022fe37e2",
+                    "zone": "au-syd-2",
+                    "delete_chaos_acl": true
+                }
+            },
+            "pauses": {
+                "after": 10
+            }
+        }
+    ],
+    "rollbacks": [
+       
+    ]
+}
