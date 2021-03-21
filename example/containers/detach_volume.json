@@ -3,8 +3,13 @@
     "title": "What is the impact of stopping Server?",
     "description": "This a dummy experiment.",
     "tags": [
-        "tls"
+        "Test mysql de-attach volume without haporxy"
     ],
+    "secrets": {
+        "k8s": {
+            "KUBERNETES_CONTEXT": "kube-chaos-testing/c0p0s2ss08odo1k9o7qg"
+        }
+    },
     "configuration": {
         "api_key": {
             "type": "env",
@@ -28,7 +33,7 @@
                         "host": "acceef95-au-syd.lb.appdomain.cloud",
                         "user": "root",
                         "password": "root_password",
-                        "iteration": 50
+                        "iteration": 5
                     }
                 }
             }
@@ -45,15 +50,32 @@
                 "arguments": {
                     "cluster_id": "c0p0s2ss08odo1k9o7qg",
                     "volume_id": "r026-8fd2bf71-bb7d-4a66-bbdf-0c694b260175",
-                    "worker_id":"kube-c0p0s2ss08odo1k9o7qg-kubechaoste-default-000001ee"
+                    "worker_id": "kube-c0p0s2ss08odo1k9o7qg-kubechaoste-default-000001ee"
                 }
             },
-            "pause": {
+            "pauses": {
                 "after": 30
             }
         }
-
     ],
     "rollbacks": [
+        {
+            "type": "action",
+            "name": "Attach Volume",
+            "provider": {
+                "type": "python",
+                "module": "ibmcloud.container.actions",
+                "func": "attach_volume_to_worker",
+                "arguments": {
+                    "cluster_id": "c0p0s2ss08odo1k9o7qg",
+                    "volume_id": "r026-8fd2bf71-bb7d-4a66-bbdf-0c694b260175",
+                    "worker_id": "kube-c0p0s2ss08odo1k9o7qg-kubechaoste-default-000001ee"
+                }
+            },
+            "pauses": {
+                "after": 150
+            }
+        }
+
     ]
 }

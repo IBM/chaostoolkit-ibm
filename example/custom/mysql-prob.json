@@ -14,10 +14,10 @@
                     "module": "ibmcloud.custom.probes",
                     "func": "probe_mysql",
                     "arguments": {
-                        "host": "<host>",
-                        "user": "root",
+                        "host": "<IP/Host>",
+                        "user": "<username>",
                         "password": "<password>",
-                        "iteration": 150
+                        "iteration": 10
                     }
                 }
             }

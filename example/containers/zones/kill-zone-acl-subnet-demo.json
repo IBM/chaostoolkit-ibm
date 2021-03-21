@@ -1,0 +1,56 @@
+{
+    "version": "1.0.0",
+    "title": "What is the impact of dropping a Zone?",
+    "description": "In this exp I will the drop the zone adding a denyall outbound and inbound to the subnet .",
+    "tags": [
+        "tls"
+    ],
+    "configuration": {
+        "api_key": {
+            "type": "env",
+            "key": "API_KEY"
+        },
+        "generation": "2",
+        "service_url": "https://au-syd.iaas.cloud.ibm.com/v1"
+    },
+    "steady-state-hypothesis": {
+        "title": "Application responds",
+        "probes": [
+            {
+                "type": "probe",
+                "name": "Check the a machine is running",
+                "tolerance": 0,
+                "provider": {
+                    "type": "python",
+                    "module": "ibmcloud.custom.probes",
+                    "func": "probe_mysql",
+                    "arguments": {
+                        "host": "acceef95-au-syd.lb.appdomain.cloud",
+                        "user": "root",
+                        "password": "root_password",
+                        "iteration": 5
+                    }
+                }
+            }
+        ]
+    },
+    "method": [
+        {
+            "type": "action",
+            "name": "ACL cordon instances at zone au-syd-1",
+            "provider": {
+                "type": "python",
+                "module": "ibmcloud.vpc.actions",
+                "func": "cordon_subnet",
+                "arguments": {
+                    "vpc_id": "r026-fcfd2d0e-c752-4b88-8282-0f714a812c19",
+                    "subnet_id": "02h7-e79d559d-f415-47a5-a0c7-02339b5bb5ae"
+                }
+            },
+            "pauses": {
+                "after": 300
+            }
+        }
+    ],
+    "rollbacks": []
+}
