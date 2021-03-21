@@ -16,22 +16,6 @@
     "steady-state-hypothesis": {
         "title": "Application responds",
         "probes": [
-            {
-                "type": "probe",
-                "name": "Check the a machine is running",
-                "tolerance": 0,
-                "provider": {
-                    "type": "python",
-                    "module": "ibmcloud.custom.probes",
-                    "func": "probe_mysql",
-                    "arguments": {
-                        "host": "acceef95-au-syd.lb.appdomain.cloud",
-                        "user": "root",
-                        "password": "root_password",
-                        "iteration": 5
-                    }
-                }
-            }
         ]
     },
     "method": [
