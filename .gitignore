@@ -93,8 +93,8 @@ env/
 linux-env/
 
 # IDEA
-.vscode
-.idea
+.vscode/
+.idea/
 
 # Spyder project settings
 .spyderproject
