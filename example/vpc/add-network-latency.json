@@ -34,7 +34,7 @@
                     "tag": true
                 }
             },
-            "pause": {
+            "pauses": {
                 "after": 30
             }
         }

@@ -74,5 +74,5 @@ def load_exported_activities() -> List[DiscoveredActivities]:
     activities.extend(discover_probes("ibmcloud.vpc.probes"))
     activities.extend(discover_actions("ibmcloud.vpc.actions"))
     activities.extend(discover_actions("ibmcloud.container.actions"))
-    activities.extend(discover_actions("ibmcloud.custom.probes"))
+    activities.extend(discover_actions("ibmcloud.middleware.probes"))
     return activities

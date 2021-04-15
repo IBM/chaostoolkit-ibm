@@ -18,7 +18,7 @@ import time
 __all__ = [
     "create_instance_action", "delete_load_balancer",
     "remove_volume_from_instance", "add_volume_to_instance",
-    "add_network_latency", "start_multiple_instances",
+    "add_network_latency", "add_drop_packet", "start_multiple_instances",
     "stop_multiple_instances",
     "delete_load_balancer_members",
     "cordon_subnet"
@@ -52,7 +52,7 @@ def add_network_latency(configuration: Configuration,
                         hostname: str = None,
                         timeout: int = 60,
                         tag: bool = False):
-    if hostname == None:
+    if hostname is None:
         service = create_ibmcloud_api_client(configuration)
         if tag:
             tag_virtual_instance(configuration=configuration, instance_id=instance_id, service=service,
@@ -71,6 +71,31 @@ def add_network_latency(configuration: Configuration,
             interface = next(stdout).strip()
         _, stdout, _ = client.exec_command(
             f'sudo tc qdisc add dev {interface} root netem delay {delay}ms {jitter}ms;sleep {duration};sudo tc qdisc del dev {interface} root')
+
+
+def add_drop_packet(configuration: Configuration,
+                    instance_id: str,
+                    username: str,
+                    password: str,
+                    target_ip: str,
+                    duration: int = 30,
+                    hostname: str = None,
+                    tag: bool = False):
+    print(password)
+    if hostname is None:
+        service = create_ibmcloud_api_client(configuration)
+        if tag:
+            tag_virtual_instance(configuration=configuration, instance_id=instance_id, service=service,
+                                 tagname='add_drop_packet')
+        response = service.list_instance_network_interfaces(instance_id=instance_id)._to_dict()
+        output_dict = [attachment for attachment in response['result']['network_interfaces']]
+        hostname = output_dict[0]['floating_ips'][0]['address']
+
+    with CommandExecuter(hostname=hostname, username=username, password=password) as client:
+        # client.exec_command('ls')
+        # If interface not provided pick up the first none local interface
+        _, stdout, _ = client.exec_command(
+            f'iptables -I  OUTPUT -j DROP -d {target_ip} -m conntrack --ctstate ESTABLISHED,RELATED;sleep {duration};iptables -D  OUTPUT -j DROP -d {target_ip} -m conntrack --ctstate ESTABLISHED,RELATED')
 
 
 def cordon_subnet(configuration: Configuration,
@@ -110,12 +135,10 @@ def cordon_subnet(configuration: Configuration,
 
     # Get target subnets
     subnets = []
-
     if vpc_id is not None:
         # list all subnet
         subnets = [subnet for subnet in service.list_subnets()._to_dict()['result']['subnets'] if
                    subnet['vpc']['id'] == vpc_id]
-
     if subnet_id is not None:
         subnets = [subnet for subnet in subnets if subnet['id'] == subnet_id]
 
@@ -365,8 +388,5 @@ def delete_load_balancer_members(configuration: Configuration,
                     service.delete_load_balancer_pool_member(id, pool['id'], member['id'])
                     # TODO Replace with checking lb status
                     time.sleep(30)
-
-
-
     except ApiException as e:
         logger.error("Delete Load balancer memebers " + str(e.code) + ": " + e.message)

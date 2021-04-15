@@ -1,0 +1,125 @@
+{
+  "version": "1.0.0",
+  "title": "What is the impact of stopping Server?",
+  "description": "This a dummy experiment.",
+  "secrets": {
+    "roks": {
+      "KUBERNETES_CONTEXT": "mq2/c100-e-us-south-containers-cloud-ibm-com:30774/IAM#ahmed.sayed.hassan@ibm.com"
+    }
+  },
+  "configuration": {
+    "mq_host": {
+      "type": "env",
+      "key": "MQ_IP"
+    },
+    "mq_port": {
+      "type": "env",
+      "key": "MQ_PORT"
+    }
+  },
+  "steady-state-hypothesis": {
+    "title": "Application responds",
+    "probes": [
+      {
+        "type": "probe",
+        "name": "Check the a MQ is running by putting 10 messages",
+        "tolerance": 0,
+        "secrets": [
+          "mq"
+        ],
+        "provider": {
+          "type": "python",
+          "module": "ibmcloud.middleware.probes",
+          "func": "probe_mq",
+          "arguments": {
+            "mgr": "HAEXAMPLE",
+            "channel": "HAQMCHL",
+            "queue_name": "EXAMPLE.QUEUE",
+            "action": "put",
+            "number_of_messages": 10
+          }
+        }
+      },
+      {
+        "type": "probe",
+        "name": "Check the a MQ is running by getting 10 messages",
+        "tolerance": 0,
+        "secrets": [
+          "mq"
+        ],
+        "provider": {
+          "type": "python",
+          "module": "ibmcloud.middleware.probes",
+          "func": "probe_mq",
+          "arguments": {
+            "mgr": "HAEXAMPLE",
+            "channel": "HAQMCHL",
+            "queue_name": "EXAMPLE.QUEUE",
+            "action": "get",
+            "number_of_messages": 10
+          }
+        }
+      }
+    ]
+  },
+  "method": [
+    {
+      "type": "action",
+      "name": "cordon all nodes",
+      "secrets": [
+        "roks"
+      ],
+      "provider": {
+        "type": "python",
+        "module": "chaosk8s.node.actions",
+        "func": "cordon_node",
+        "arguments": {}
+      },
+      "pauses": {
+        "after": 5
+      }
+    },
+    {
+      "ref": "Check the a MQ is running by putting 10 messages"
+    },
+    {
+      "type": "action",
+      "name": "terminate-mq-2-pod",
+      "secrets": [
+        "roks"
+      ],
+      "provider": {
+        "type": "python",
+        "module": "chaosk8s.pod.actions",
+        "func": "terminate_pods",
+        "arguments": {
+          "name_pattern": "nativeha-example-ibm-mq-2",
+          "ns": "mq2",
+          "grace_period": 0
+        }
+      },
+      "pauses": {
+        "after": 30
+      }
+    },
+    {
+      "ref": "Check the a MQ is running by getting 10 messages"
+    },
+    {
+      "type": "action",
+      "name": "uncordon all nodes",
+      "secrets": [
+        "roks"
+      ],
+      "provider": {
+        "type": "python",
+        "module": "chaosk8s.node.actions",
+        "func": "uncordon_node",
+        "arguments": {}
+      },
+      "pauses": {
+        "after": 30
+      }
+    }
+  ]
+}

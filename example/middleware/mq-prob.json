@@ -1,0 +1,194 @@
+{
+  "version": "1.0.0",
+  "title": "What is the impact of stopping Server?",
+  "description": "This a dummy experiment.",
+  "secrets": {
+    "roks": {
+      "KUBERNETES_CONTEXT": "mq2/c100-e-us-south-containers-cloud-ibm-com:30774/IAM#ahmed.sayed.hassan@ibm.com"
+    }
+  },
+  "configuration": {
+    "mq_host": {
+      "type": "env",
+      "key": "MQ_IP"
+    },
+    "mq_port": {
+      "type": "env",
+      "key": "MQ_PORT"
+    }
+  },
+  "steady-state-hypothesis": {
+    "title": "Application responds",
+    "probes": [
+      {
+        "type": "probe",
+        "name": "Check the a MQ is running",
+        "tolerance": 0,
+        "provider": {
+          "type": "python",
+          "module": "ibmcloud.middleware.probes",
+          "func": "probe_mq",
+          "arguments": {
+            "mgr": "HAEXAMPLE",
+            "channel": "HAQMCHL",
+            "queue_name": "EXAMPLE.QUEUE",
+            "action": "put_get",
+            "number_of_messages": 1
+          }
+        }
+      }
+    ]
+  },
+  "method": [
+    {
+      "type": "probe",
+      "name": "Put 10 Messages before killing the MQ",
+      "tolerance": 0,
+      "provider": {
+        "type": "python",
+        "module": "ibmcloud.middleware.probes",
+        "func": "probe_mq",
+        "arguments": {
+          "mgr": "HAEXAMPLE",
+          "channel": "HAQMCHL",
+          "queue_name": "EXAMPLE.QUEUE",
+          "action": "put",
+          "number_of_messages": 10
+        }
+      }
+    },
+    {
+      "type": "action",
+      "name": "cordon all nodes",
+      "secrets": [
+        "roks"
+      ],
+      "provider": {
+        "type": "python",
+        "module": "chaosk8s.node.actions",
+        "func": "cordon_node",
+        "arguments": {}
+      },
+      "pauses": {
+        "after": 5
+      }
+    },
+    {
+      "type": "action",
+      "name": "terminate-mq-0-pod",
+      "secrets": [
+        "roks"
+      ],
+      "provider": {
+        "type": "python",
+        "module": "chaosk8s.pod.actions",
+        "func": "terminate_pods",
+        "arguments": {
+          "name_pattern": "nativeha-example-ibm-mq-0",
+          "ns": "mq2",
+          "grace_period": 0
+        }
+      },
+      "pauses": {
+        "after": 5
+      }
+    },
+    {
+      "type": "probe",
+      "name": "Get 10 Message after killing the MQ",
+      "tolerance": 0,
+      "provider": {
+        "type": "python",
+        "module": "ibmcloud.middleware.probes",
+        "func": "probe_mq",
+        "arguments": {
+          "mgr": "HAEXAMPLE",
+          "channel": "HAQMCHL",
+          "queue_name": "EXAMPLE.QUEUE",
+          "action": "get",
+          "number_of_messages": 10
+        }
+      }
+    },
+    {
+      "type": "action",
+      "name": "uncordon all nodes",
+      "secrets": [
+        "roks"
+      ],
+      "provider": {
+        "type": "python",
+        "module": "chaosk8s.node.actions",
+        "func": "uncordon_node",
+        "arguments": {}
+      },
+      "pauses": {
+        "after": 30
+      }
+    },
+    {
+      "ref": "Put 10 Messages before killing the MQ"
+    },
+    {
+      "ref": "cordon all nodes"
+    },
+    {
+      "type": "action",
+      "name": "terminate-mq-1-pod",
+      "secrets": [
+        "roks"
+      ],
+      "provider": {
+        "type": "python",
+        "module": "chaosk8s.pod.actions",
+        "func": "terminate_pods",
+        "arguments": {
+          "name_pattern": "nativeha-example-ibm-mq-1",
+          "ns": "mq2",
+          "grace_period": 0
+        }
+      },
+      "pauses": {
+        "after": 5
+      }
+    },
+    {
+      "ref": "Get 10 Message after killing the MQ"
+    },
+    {
+      "ref": "uncordon all nodes"
+    },
+    {
+      "ref": "cordon all nodes"
+    },
+    {
+      "ref": "Put 10 Messages before killing the MQ"
+    },
+    {
+      "type": "action",
+      "name": "terminate-mq-2-pod",
+      "secrets": [
+        "roks"
+      ],
+      "provider": {
+        "type": "python",
+        "module": "chaosk8s.pod.actions",
+        "func": "terminate_pods",
+        "arguments": {
+          "name_pattern": "nativeha-example-ibm-mq-2",
+          "ns": "mq2",
+          "grace_period": 0
+        }
+      },
+      "pauses": {
+        "after": 5
+      }
+    },
+    {
+      "ref": "Get 10 Message after killing the MQ"
+    },
+    {
+      "ref": "uncordon all nodes"
+    }
+  ]
+}

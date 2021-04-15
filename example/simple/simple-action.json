@@ -1,0 +1,36 @@
+{
+    "version": "1.0.0",
+    "title": "What is the impact of stopping Server?",
+    "description": "This a dummy experiment.",
+    "secrets": {
+        "roks": {
+            "KUBERNETES_CONTEXT": "default/c100-e-us-south-containers-cloud-ibm-com:30774/IAM#ahmed.sayed.hassan@ibm.com"
+        }
+    },
+    "steady-state-hypothesis": {
+        "title": "Application responds",
+        "probes": [
+        ]
+    },
+    "method": [
+        {
+            "type": "action",
+            "name": "node-red-pod",
+            "secrets": ["roks"],
+            "provider": {
+                "type": "python",
+                "module": "chaosk8s.pod.actions",
+                "func": "terminate_pods",
+                "arguments" : {
+                    "label_selector":  "app=node-red",
+                    "ns": "default",
+                    "grace_period": 0
+                }
+
+            },
+            "pauses": {
+                "after": 5
+            }
+        }
+    ]
+}

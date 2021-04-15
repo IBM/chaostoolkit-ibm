@@ -1,0 +1,57 @@
+{
+  "version": "1.0.0",
+  "title": "What is the impact of stopping Server?",
+  "description": "This a dummy experiment.",
+  "configuration": {
+    "mq_host": {
+      "type": "env",
+      "key": "MQ_IP"
+    },
+    "mq_port": {
+      "type": "env",
+      "key": "MQ_PORT"
+    }
+  },
+  "steady-state-hypothesis": {
+    "title": "Application responds",
+    "probes": [
+      {
+        "type": "probe",
+        "secrets": "mq",
+        "name": "Check the a MQ is running by putting 10 messages",
+        "tolerance": 0,
+        "provider": {
+          "type": "python",
+          "module": "ibmcloud.middleware.probes",
+          "func": "probe_mq",
+          "arguments": {
+            "mgr": "HAEXAMPLE",
+            "channel": "HAQMCHL",
+            "queue_name": "EXAMPLE.QUEUE",
+            "action": "put",
+            "number_of_messages": 10
+          }
+        }
+      },
+      {
+        "type": "probe",
+        "name": "Check the a MQ is running by getting 10 messages",
+        "tolerance": 0,
+        "provider": {
+          "type": "python",
+          "module": "ibmcloud.middleware.probes",
+          "func": "probe_mq",
+          "arguments": {
+            "mgr": "HAEXAMPLE",
+            "channel": "HAQMCHL",
+            "queue_name": "EXAMPLE.QUEUE",
+            "action": "get",
+            "number_of_messages": 10
+          }
+        }
+      }
+    ]
+  },
+  "method": [
+  ]
+}

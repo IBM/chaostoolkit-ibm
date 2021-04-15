@@ -1,0 +1,55 @@
+{
+    "version": "1.0.0",
+    "title": "What is the impact of Adding network Delay for 20 Seconds",
+    "description": "This a dummy experiment.",
+    "tags": [
+        "tls"
+    ],
+    "configuration": {
+        "api_key": {
+            "type": "env",
+            "key": "API_KEY"
+        },
+        "generation": "2",
+        "service_url": "https://au-syd.iaas.cloud.ibm.com/v1"
+    },
+    "steady-state-hypothesis": {
+        "title": "Application response",
+        "probes": [
+            {
+                "name": "Check the health of the blog",
+                "type": "probe",
+                "tolerance": 200,
+                "provider" :{
+                    "type": "http",
+                   "timeout": 6,
+                    "url": "http://6c3b0002-au-syd.lb.appdomain.cloud/2021/03/28/chaos-engineering/"
+                }
+            }
+        ]
+    },
+    "method": [
+        {
+            "type": "action",
+            "name": "Add Network Latency",
+            "provider": {
+                "type": "python",
+                "module": "ibmcloud.vpc.actions",
+                "func": "add_drop_packet",
+                "arguments": {
+                    "instance_id": "02i7_e8f268a3-ad35-4ebe-a921-0cc9027586b7",
+                    "username":"root",
+                    "password":"<YOUR_PASSWORD>",
+                    "target_ip":"10.245.64.14",
+                    "duration": 30,
+                    "tag": true
+                }
+            },
+            "pauses": {
+                "after": 40
+            }
+        }
+    ],
+    "rollbacks": [
+    ]
+}

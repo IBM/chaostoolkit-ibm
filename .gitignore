@@ -89,6 +89,12 @@ celerybeat-schedule
 .venv
 venv/
 ENV/
+env/
+linux-env/
+
+# IDEA
+.vscode
+.idea
 
 # Spyder project settings
 .spyderproject
