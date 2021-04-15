@@ -96,6 +96,7 @@ linux-env/
 .vscode/
 .idea/
 
+
 # Spyder project settings
 .spyderproject
 .spyproject
