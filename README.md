@@ -10,9 +10,6 @@ extension to the [Chaos Toolkit][chaostoolkit].
 [probes]: http://chaostoolkit.org/reference/api/experiment/#probe
 [chaostoolkit]: http://chaostoolkit.org
 
-### Desgin Principle and Contribution Guide.
-
-Chaostoolkit can ba considered a [Low Code Development Platform](https://en.wikipedia.org/wiki/Low-code_development_platform#:~:text=A%20low%2Dcode%20development%20platform,traditional%20hand%2Dcoded%20computer%20programming.)  
 
 The following guidelines  for chaostoolkit-ibmcloud
 -----------------------------------------------------
