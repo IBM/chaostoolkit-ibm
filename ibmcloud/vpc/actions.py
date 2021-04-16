@@ -21,7 +21,7 @@ __all__ = [
     "add_network_latency", "add_drop_packet", "start_multiple_instances",
     "stop_multiple_instances",
     "delete_load_balancer_members",
-    "cordon_subnet"
+    "cordon_subnet", "uncordon_subnet"
 ]
 
 
@@ -65,7 +65,7 @@ def add_network_latency(configuration: Configuration,
     with CommandExecuter(hostname=hostname, username=username, password=password) as client:
         # client.exec_command('ls')
         # If interface not provided pick up the first none local interface
-        if interface == None:
+        if interface is None:
             _, stdout, _ = client.exec_command(
                 "ip addr | grep UP | grep -v LOOPBACK | awk -F':' '{print $2}' | sed -e 's/^[[:space:]]*//'")
             interface = next(stdout).strip()
@@ -81,7 +81,6 @@ def add_drop_packet(configuration: Configuration,
                     duration: int = 30,
                     hostname: str = None,
                     tag: bool = False):
-    print(password)
     if hostname is None:
         service = create_ibmcloud_api_client(configuration)
         if tag:

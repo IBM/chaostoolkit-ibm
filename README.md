@@ -35,19 +35,28 @@ The following guidelines  for chaostoolkit-ibmcloud
 
 ### Probes
 
-|probe| Description|
-|------|-------------|
-|get_virtual_servers | check the status of Virtual Instance|
+|Category   |probe                | Description                               |
+|-----------|---------------------|-------------------------------------------|
+| VPC       |get_virtual_servers  | check the status of Virtual Instance      |
+| Cloud Pak | probe_mq            | put and get message IBM MQ                |
 
 ### Actions
 
-|Action | Descritpion |
-|--------|------------|
-|create_instance_action | based on the type you can start, stop , restart Server |
-|delete_load_balancer | Delete Loadbalancer|
-|remove_volume_from_instance | De-attach Volume from  virtual Instance |
-|add_volume_to_instance | Attach Volume to virtual Instance |
-|add_network_latency | Add Network Latency |
+|Category |Action                      | Description                                            |
+|---------|----------------------------|--------------------------------------------------------|
+| VPC     |create_instance_action      | based on the type you can start, stop , restart Server |
+| VPC     |delete_load_balancer        | Delete Loadbalancer                                    |
+| VPC     |remove_volume_from_instance | De-attach Volume from  virtual Instance                |
+| VPC     |add_volume_to_instance      | Attach Volume to virtual Instance                      |
+| VPC     |start_multiple_instances    | turn on one or more Virtual Machines                   |
+| VPC     |stop_multiple_instances     | turn off one or more virtual machines                  |
+| VPC     |delete_load_balancer_members| Delete Load Balancer Members                           |
+| VPC     |cordon_subnet               | Isolate a complete subnet via adding ACL with denyall  | 
+| VPC     |uncordon_subnet             | restoring the orignal ACL should run after cordon_subnet|
+| Linux   |add_network_latency         | Add Network Latency                                    |
+| Linux   |add_drop_packet             | drop packets sent to specific IP                       |
+| Container |detach_volume_from_worker | De-attach volume from VPC IKS/ROKS Worker Nodes        |
+| Container |attach_volume_to_worker   | attach from to a VPC IKS/ROKS Worker node              |
 ## Install
 
 This package requires Python 3.5+
