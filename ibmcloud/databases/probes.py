@@ -24,7 +24,6 @@ def probe_deployment(
     service = create_ibmcloud_databases_client(configuration)
     try:
         service.get_deployment_info(id=deployment_id).get_result()
-        service.kill_connections()
         return True
     except:
         return False
