@@ -1,0 +1,31 @@
+{
+    "version": "1.0.0",
+    "title": "What is the impact of stopping Server?",
+    "description": "This a dummy experiment.",
+    "configuration": {
+        "api_key": {
+            "type": "env",
+            "key": "API_KEY"
+        },
+        "service_url": "https://api.au-syd.databases.cloud.ibm.com/v5/ibm/"
+    },
+    "steady-state-hypothesis": {
+        "title": "Application responds",
+        "probes": [
+            {
+                "type": "probe",
+                "name": "Test Postgresql",
+                "tolerance": true,
+                "provider": {
+                    "type": "python",
+                    "module": "ibmcloud.databases.probes",
+                    "func": "probe_deployment",
+                    "arguments": {
+                        "deployment_id": "<deployment_id>"
+                    }
+                }
+            }
+        ]
+    },
+    "method": []
+}

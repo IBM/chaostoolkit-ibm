@@ -39,3 +39,4 @@ packaging~=20.9
 termcolor~=1.1.0
 zipp~=3.4.0
 pymqi~=1.12.0
+ibm-cloud-databases~=0.1.0

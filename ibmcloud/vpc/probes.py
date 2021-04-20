@@ -18,8 +18,8 @@ def get_virtual_servers( configuration: Configuration ,
                          resource_group_id: str = None,
                          name: str = None,
                          vpc_id: str = None,
-                         vpc_crn: str = None,
-                         vpc_name: str = None) -> Dict[str, Any]:
+                         vpc_name: str = None,
+                         vpc_crn: str = None) -> Dict[str, Any]:
     """
     List all instances.
 
