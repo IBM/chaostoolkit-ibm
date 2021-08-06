@@ -25,7 +25,7 @@
                     "expect": "running"
                 },
                 "provider": {
-                    "type": "HTTP",
+                    "type": "python",
                     "module": "ibmcloud.vpc.probes",
                     "func": "get_virtual_servers",
                     "arguments": {

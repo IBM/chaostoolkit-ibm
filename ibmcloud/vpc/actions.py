@@ -7,7 +7,6 @@ from ibmcloud.vpc.constants import REBOOT, START, STOP
 from ibm_cloud_sdk_core import ApiException
 from ibm_cloud_sdk_core import BaseService, DetailedResponse
 from ibm_vpc.vpc_v1 import VolumeIdentityById, VolumeIdentity
-
 from ibm_vpc.vpc_v1 import NetworkACLPrototypeNetworkACLByRules as ACLNetworkByRules
 from ibm_vpc.vpc_v1 import NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAll as ACLRule
 from ibm_vpc.vpc_v1 import VPCIdentityById, NetworkACLIdentityById, SubnetPatch
@@ -57,8 +56,8 @@ def add_network_latency(configuration: Configuration,
         if tag:
             tag_virtual_instance(configuration=configuration, instance_id=instance_id, service=service,
                                  tagname='add_network_latency')
-        response = service.list_instance_network_interfaces(instance_id=instance_id)._to_dict()
-        output_dict = [attachment for attachment in response['result']['network_interfaces'] if
+        response = service.list_instance_network_interfaces(instance_id=instance_id).get_result()
+        output_dict = [attachment for attachment in response['network_interfaces'] if
                        len(attachment['floating_ips']) > 0]
         hostname = output_dict[0]['floating_ips'][0]['address']
 
@@ -86,8 +85,8 @@ def add_drop_packet(configuration: Configuration,
         if tag:
             tag_virtual_instance(configuration=configuration, instance_id=instance_id, service=service,
                                  tagname='add_drop_packet')
-        response = service.list_instance_network_interfaces(instance_id=instance_id)._to_dict()
-        output_dict = [attachment for attachment in response['result']['network_interfaces']]
+        response = service.list_instance_network_interfaces(instance_id=instance_id).get_result()
+        output_dict = [attachment for attachment in response['network_interfaces']]
         hostname = output_dict[0]['floating_ips'][0]['address']
 
     with CommandExecuter(hostname=hostname, username=username, password=password) as client:
@@ -136,7 +135,7 @@ def cordon_subnet(configuration: Configuration,
     subnets = []
     if vpc_id is not None:
         # list all subnet
-        subnets = [subnet for subnet in service.list_subnets()._to_dict()['result']['subnets'] if
+        subnets = [subnet for subnet in service.list_subnets().get_result()['subnets'] if
                    subnet['vpc']['id'] == vpc_id]
     if subnet_id is not None:
         subnets = [subnet for subnet in subnets if subnet['id'] == subnet_id]
@@ -145,7 +144,7 @@ def cordon_subnet(configuration: Configuration,
         subnets = [subnet for subnet in subnets if subnet['zone']['name'] == zone]
 
     if len(subnets) == 0:
-        raise ("No subnets match found")
+        raise "No subnets match found"
 
     for subnet in subnets:
         # Create ACL with deny all rules
@@ -174,7 +173,7 @@ def cordon_subnet(configuration: Configuration,
         acl = ACLNetworkByRules(vpc=vpc_identity, name=chaos_acl_name, rules=rules)
         # service.create_network_acl()
         network_acl = service.create_network_acl(network_acl_prototype=acl)
-        acl = network_acl._to_dict()['result']
+        acl = network_acl.get_result()
         network_acl_identity = NetworkACLIdentityById(id=acl['id'])
         subnet_patch = SubnetPatch(network_acl=network_acl_identity)
         service.update_subnet(subnet['id'], subnet_patch)
@@ -218,7 +217,7 @@ def uncordon_subnet(configuration: Configuration,
 
     if vpc_id is not None:
         # list all subnet
-        subnets = [subnet for subnet in service.list_subnets()._to_dict()['result']['subnets'] if
+        subnets = [subnet for subnet in service.list_subnets().get_result()['subnets'] if
                    subnet['vpc']['id'] == vpc_id]
 
     if subnet_id is not None:
@@ -238,7 +237,7 @@ def uncordon_subnet(configuration: Configuration,
             original_acl_name = subnet['network_acl']['name'][6:]
             # Get Chaos ACL ID to delete for clean up
             chaos_acl_id = subnet['network_acl']['id']
-            acls = service.list_network_acls()._to_dict()['result']['network_acls']
+            acls = service.list_network_acls().get_result()['network_acls']
             original_acl = [acl for acl in acls if acl['name'] == original_acl_name]
             network_acl_identity = NetworkACLIdentityById(id=original_acl[0]['id'])
             subnet_patch = SubnetPatch(network_acl=network_acl_identity)
@@ -258,8 +257,8 @@ def remove_volume_from_instance(configuration: Configuration,
             tag_virtual_instance(configuration=configuration, instance_id=instance_id, service=service,
                                  tagname='remove_volume_from_instance')
         res = service.list_instance_volume_attachments(instance_id=instance_id)
-        dict = res._to_dict()
-        output_dict = [attachment for attachment in dict['result']['volume_attachments'] if
+        dict = res.get_result()
+        output_dict = [attachment for attachment in dict['volume_attachments'] if
                        attachment['volume']['id'] == volume_id]
         volume_attachment_id = output_dict[0]['id']
         service.delete_instance_volume_attachment(instance_id=instance_id, id=volume_attachment_id)
@@ -355,7 +354,7 @@ def delete_load_balancer_members(configuration: Configuration,
     service = create_ibmcloud_api_client(configuration)
     try:
         # List Load Balancer Pool
-        lb_pools = service.list_load_balancer_pools(load_balancer_id=id)._to_dict()['result']['pools']
+        lb_pools = service.list_load_balancer_pools(load_balancer_id=id).get_result()['pools']
 
         # Filter pools if Pool Id specified
         if pool_id != None:
@@ -373,8 +372,8 @@ def delete_load_balancer_members(configuration: Configuration,
             instances = [instance for instance in instances if instance['zone']['name'] == zone]
 
         for pool in lb_pools:
-            member_list = service.list_load_balancer_pool_members(load_balancer_id=id, pool_id=pool['id'])._to_dict()
-            all_members = member_list['result']['members']
+            member_list = service.list_load_balancer_pool_members(load_balancer_id=id, pool_id=pool['id']).get_result()
+            all_members = member_list['members']
             for member in all_members:
                 # print(member)
                 ip_address = member['target']['address']
