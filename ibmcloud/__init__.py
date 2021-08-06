@@ -2,22 +2,17 @@ from chaoslib.discovery.discover import discover_actions, discover_probes, initi
 from chaoslib.types import Configuration, Discovery, DiscoveredActivities, Secrets
 from logzero import logger
 from typing import List
-from ibm_vpc import VpcV1
 from ibm_cloud_databases import CloudDatabasesV5
-from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
-from ibm_cloud_sdk_core import ApiException
+
 from ibm_platform_services import GlobalTaggingV1
 import os
 
-import importlib
 
 __all__ = ["create_ibmcloud_api_client", "discover", "__version__", "tag_virtual_instance"]
 __version__ = '0.1.0'
 
 from ibm_vpc import VpcV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
-from ibm_cloud_sdk_core import ApiException
-
 
 def create_ibmcloud_databases_client(configuration: Configuration) -> CloudDatabasesV5:
     api_key = configuration.get("api_key")
@@ -87,4 +82,5 @@ def load_exported_activities() -> List[DiscoveredActivities]:
     activities.extend(discover_actions("ibmcloud.container.actions"))
     activities.extend(discover_actions("ibmcloud.middleware.probes"))
     activities.extend(discover_actions("ibmcloud.databases.probes"))
+    activities.extend(discover_actions("ibmcloud.databases.actions"))
     return activities

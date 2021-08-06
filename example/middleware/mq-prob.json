@@ -4,7 +4,7 @@
   "description": "This a dummy experiment.",
   "secrets": {
     "roks": {
-      "KUBERNETES_CONTEXT": "mq2/c100-e-us-south-containers-cloud-ibm-com:30774/IAM#ahmed.sayed.hassan@ibm.com"
+      "KUBERNETES_CONTEXT": "<kubernetes-context>"
     }
   },
   "configuration": {
@@ -85,7 +85,7 @@
         "func": "terminate_pods",
         "arguments": {
           "name_pattern": "nativeha-example-ibm-mq-0",
-          "ns": "mq2",
+          "ns": "mq",
           "grace_period": 0
         }
       },
@@ -144,7 +144,7 @@
         "func": "terminate_pods",
         "arguments": {
           "name_pattern": "nativeha-example-ibm-mq-1",
-          "ns": "mq2",
+          "ns": "mq",
           "grace_period": 0
         }
       },
@@ -176,7 +176,7 @@
         "func": "terminate_pods",
         "arguments": {
           "name_pattern": "nativeha-example-ibm-mq-2",
-          "ns": "mq2",
+          "ns": "mq",
           "grace_period": 0
         }
       },

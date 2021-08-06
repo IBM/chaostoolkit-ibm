@@ -4,7 +4,7 @@
   "description": "This a dummy experiment.",
   "secrets": {
     "roks": {
-      "KUBERNETES_CONTEXT": "mq2/c100-e-us-south-containers-cloud-ibm-com:30774/IAM#ahmed.sayed.hassan@ibm.com"
+      "KUBERNETES_CONTEXT": "<kubernetes-context>"
     }
   },
   "configuration": {
@@ -84,7 +84,7 @@
     },
     {
       "type": "action",
-      "name": "terminate-mq-2-pod",
+      "name": "terminate-active-pod",
       "secrets": [
         "roks"
       ],
@@ -93,13 +93,13 @@
         "module": "chaosk8s.pod.actions",
         "func": "terminate_pods",
         "arguments": {
-          "name_pattern": "nativeha-example-ibm-mq-2",
-          "ns": "mq2",
+          "name_pattern": "nativeha-example-ibm-mq-0",
+          "ns": "mq",
           "grace_period": 0
         }
       },
       "pauses": {
-        "after": 30
+        "after": 10
       }
     },
     {

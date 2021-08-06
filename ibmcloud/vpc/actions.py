@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from typing import Any, Dict
 
-from chaoslib.types import Configuration, Secrets
-from ibmcloud import create_ibmcloud_api_client, tag_virtual_instance, tag_lb
+from chaoslib.types import Configuration
+from ibmcloud import create_ibmcloud_api_client, tag_virtual_instance
 from ibmcloud.vpc.constants import REBOOT, START, STOP
 from ibm_cloud_sdk_core import ApiException
 from ibm_cloud_sdk_core import BaseService, DetailedResponse
